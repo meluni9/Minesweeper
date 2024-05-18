@@ -13,8 +13,6 @@ const NUMBER_OF_MINES = 10;
 const board = createBoard(BOARD_SIZE, NUMBER_OF_MINES);
 const boardElement = document.querySelector(".board");
 
-console.log(board)
-
 for (let row of board) {
     for (let tile of row) {
         boardElement.append(tile.element);
