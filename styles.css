@@ -52,7 +52,7 @@ body {
 }
 
 .board > [data-status="number"] {
-    background-color: rgba(103, 103, 103, 0.5);
+    background-color: none;
 }
 
 .board > [data-status="marked"] {

@@ -40,6 +40,18 @@ export const createBoard = (boardSize, numberOfMines) => {
     return board;
 }
 
+export const markTile = (tile)  => {
+    if (tile.status !== TILE_STATUSES.HIDDEN && tile.status !== TILE_STATUSES.MARKED) {
+        return;
+    }
+    if (tile.status === TILE_STATUSES.MARKED) {
+        tile.status = TILE_STATUSES.HIDDEN;
+    }
+    else {
+        tile.status = TILE_STATUSES.MARKED;
+    }
+}
+
 const getMinePositions = (boardSize, numberOfMines) => {
     const positions = [];
 
