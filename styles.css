@@ -58,3 +58,19 @@ body {
 .board > [data-status="marked"] {
     background-color: yellow;
 }
+
+/* Додайте ці стилі до існуючого файлу styles.css */
+.reset-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.reset-button:hover {
+    background-color: #777;
+}
