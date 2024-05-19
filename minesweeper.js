@@ -12,7 +12,6 @@ export const TILE_STATUSES = {
 export const createBoard = (boardSize, numberOfMines) => {
     const board = [];
     const minePositions = getMinePositions(boardSize, numberOfMines);
-    console.log(minePositions);
 
     for (let x= 0; x < boardSize; x++) {
         const row = [];
@@ -52,6 +51,54 @@ export const markTile = (tile)  => {
     }
 }
 
+export const revealTile = (board, tile) => {
+    if (tile.status !== TILE_STATUSES.HIDDEN) {
+        return;
+    }
+    if (tile.mine) {
+        tile.status = TILE_STATUSES.MINE;
+        return;
+    }
+
+    tile.status = TILE_STATUSES.NUMBER;
+    const neighborTiles = nearbyTiles(board, tile);
+    const neighborMines = neighborTiles.filter(t => t.mine);
+    if (neighborMines.length === 0) {
+        for (const tile of neighborTiles) {
+            revealTile(board, tile);
+        }
+    }
+    else {
+        tile.element.textContent = neighborMines.length;
+    }
+}
+
+export const checkWin = (board) => {
+    for (const row of board) {
+        for (const tile of row) {
+            const isNumberTile = tile.status === TILE_STATUSES.NUMBER;
+            const isHiddenOrMarkedMine = tile.mine &&
+                (tile.status === TILE_STATUSES.HIDDEN ||
+                    tile.status === TILE_STATUSES.MARKED);
+            if (!isNumberTile && !isHiddenOrMarkedMine) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+export const checkLose = (board) => {
+    for (const row of board) {
+        for (const tile of row) {
+            if (tile.status === TILE_STATUSES.MINE) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 const getMinePositions = (boardSize, numberOfMines) => {
     const positions = [];
 
@@ -72,3 +119,16 @@ const getMinePositions = (boardSize, numberOfMines) => {
 const positionsMatch = (a, b) => a.x === b.x && a.y === b.y;
 
 const randomNumber = size => Math.floor(Math.random() * size);
+
+const nearbyTiles = (board, {x, y}) => {
+    const tiles = [];
+    for (let xOffset = -1; xOffset <= 1; xOffset++) {
+        for (let yOffset = -1; yOffset <= 1; yOffset++) {
+            const tile = board[x + xOffset]?.[y + yOffset];
+            if (tile) {
+                tiles.push(tile);
+            }
+        }
+    }
+    return tiles;
+}
