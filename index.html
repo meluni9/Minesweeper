@@ -9,13 +9,14 @@
 </head>
 <body>
 <h3 class="title">Minesweeper</h3>
-<div class="subtext">
-    Mines Left: <span data-mine-count></span>
+<div class="subtext" id="game-status"></div>
+<div class="subtext" id="mines-left-container">
+    Mines Left: <span id="mines-left" data-mine-count></span>
 </div>
-<div class="subtext">
-    Time: <span data-timer>0</span>s
+<div class="subtext" id="timer-container">
+    Time: <span id="timer" data-timer>0</span>s
 </div>
-<div class="subtext">
+<div class="subtext" id="difficulty-container">
     Difficulty:
     <select id="difficulty">
         <option value="easy">Easy</option>
@@ -23,7 +24,7 @@
         <option value="hard">Hard</option>
     </select>
 </div>
-<div class="board"></div>
-<button class="reset-button">Restart Game</button>
+<div class="board" id="board"></div>
+<button class="reset-button" id="reset-button">Restart Game</button>
 </body>
 </html>
