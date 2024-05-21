@@ -11,6 +11,13 @@ const messageText = document.querySelector(".subtext");
 const timerElement = document.querySelector("#timer");
 const resetButton = document.querySelector("#reset-button");
 const difficultySelect = document.querySelector("#difficulty");
+const bestScoreElement = document.querySelector("#best-score");
+
+const bestScores = {
+    easy: Infinity,
+    medium: Infinity,
+    hard: Infinity,
+};
 
 const init = ({ size, mines }) => {
     const board = createBoard(size, mines);
@@ -65,6 +72,7 @@ const checkGameEnd = (board) => {
 
     if (win) {
         messageText.textContent = "You win!";
+        updateBestScore();
     }
     if (lose) {
         messageText.textContent = "You lose!";
@@ -85,6 +93,24 @@ const revealAllMines = (board) => {
     }
 }
 
+const updateBestScore = () => {
+    const selectedDifficulty = difficultySelect.value;
+    const elapsedTime = parseInt(timerElement.textContent);
+    if (elapsedTime < bestScores[selectedDifficulty]) {
+        bestScores[selectedDifficulty] = elapsedTime;
+        bestScoreElement.textContent = elapsedTime;
+    }
+}
+
+const displayBestScore = (difficulty) => {
+    const bestScore = bestScores[difficulty];
+    if (bestScore === Infinity) {
+        bestScoreElement.textContent = "No record";
+    } else {
+        bestScoreElement.textContent = bestScore;
+    }
+}
+
 const disableBoardInteraction = () => {
     boardElement.addEventListener("click", stopProp, { capture: true });
     boardElement.addEventListener("contextmenu", stopProp, { capture: true });
@@ -101,6 +127,7 @@ difficultySelect.addEventListener("change", () => {
     const selectedDifficulty = difficultySelect.value;
     const settings = DIFFICULTY_SETTINGS[selectedDifficulty];
     init(settings);
+    displayBestScore(selectedDifficulty);
 });
 
 resetButton.addEventListener("click", () => {
