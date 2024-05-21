@@ -9,6 +9,12 @@ export const TILE_STATUSES = {
     NUMBER: "number",
 }
 
+export const DIFFICULTY_SETTINGS = {
+    easy: { size: 8, mines: 10 },
+    medium: { size: 12, mines: 20 },
+    hard: { size: 16, mines: 40 },
+};
+
 export const createBoard = (boardSize, numberOfMines) => {
     const board = [];
     const minePositions = getMinePositions(boardSize, numberOfMines);

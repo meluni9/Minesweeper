@@ -2,14 +2,8 @@
 
 // Display and UI
 
-import {TILE_STATUSES, createBoard, markTile, revealTile, checkWin, checkLose,} from "./minesweeper.js";
+import {TILE_STATUSES, DIFFICULTY_SETTINGS, createBoard, markTile, revealTile, checkWin, checkLose,} from "./minesweeper.js";
 import { startTimer, stopTimer } from "./timer.js";
-
-const DIFFICULTY_SETTINGS = {
-    easy: { size: 8, mines: 10 },
-    medium: { size: 12, mines: 20 },
-    hard: { size: 16, mines: 40 },
-};
 
 const boardElement = document.querySelector("#board");
 const minesLeftText = document.querySelector("#mines-left");
