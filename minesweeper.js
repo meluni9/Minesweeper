@@ -1,6 +1,4 @@
-"use strict"
-
-// Logic
+"use strict";
 
 export const TILE_STATUSES = {
     HIDDEN: "hidden",

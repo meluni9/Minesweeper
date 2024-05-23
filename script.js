@@ -1,8 +1,6 @@
 "use strict";
 
-// Display and UI
-
-import {TILE_STATUSES, DIFFICULTY_SETTINGS, createBoard, markTile, revealTile, checkWin, checkLose,} from "./minesweeper.js";
+import { TILE_STATUSES, DIFFICULTY_SETTINGS, createBoard, markTile, revealTile, checkWin, checkLose } from "./minesweeper.js";
 import { startTimer, stopTimer } from "./timer.js";
 
 const boardElement = document.querySelector("#board");
@@ -17,9 +15,15 @@ const bestScores = {
     easy: Infinity,
     medium: Infinity,
     hard: Infinity,
-};
+}
 
-const init = ({ size, mines }) => {
+const TILE_SETTINGS = {
+    easy: { size: 60, fontSize: 38 },
+    medium: { size: 45, fontSize: 34 },
+    hard: { size: 35, fontSize: 30 },
+}
+
+const initGame = ({ size, mines }) => {
     const board = createBoard(size, mines);
     resetBoard(mines);
     setupBoard(board, size, mines);
@@ -37,27 +41,30 @@ const resetBoard = (mines) => {
 }
 
 const setupBoard = (board, size, mines) => {
-    for (let row of board) {
-        for (let tile of row) {
+    for (const row of board) {
+        for (const tile of row) {
+            setupTileListeners(tile, board, size, mines);
             boardElement.append(tile.element);
-            tile.element.addEventListener("click", () => {
-                revealTile(board, tile);
-                checkGameEnd(board, size, mines);
-            });
-            tile.element.addEventListener("contextmenu", e => {
-                e.preventDefault();
-                markTile(tile);
-                listMinesLeft(board, mines);
-            });
         }
     }
 }
 
-const listMinesLeft = (board, mines) => {
+const setupTileListeners = (tile, board, size, mines) => {
+    tile.element.addEventListener("click", () => {
+        revealTile(board, tile);
+        checkGameEnd(board);
+    });
+    tile.element.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        markTile(tile);
+        updateMinesLeftCount(board, mines);
+    });
+}
+
+const updateMinesLeftCount = (board, mines) => {
     const markedTilesCount = board.reduce((count, row) => {
         return count + row.filter(tile => tile.status === TILE_STATUSES.MARKED).length;
     }, 0);
-
     minesLeftText.textContent = (mines - markedTilesCount).toString();
 }
 
@@ -81,8 +88,8 @@ const checkGameEnd = (board) => {
 }
 
 const revealAllMines = (board) => {
-    for (let row of board) {
-        for (let tile of row) {
+    for (const row of board) {
+        for (const tile of row) {
             if (tile.status === TILE_STATUSES.MARKED) {
                 markTile(tile);
             }
@@ -112,21 +119,28 @@ const displayBestScore = (difficulty) => {
 }
 
 const disableBoardInteraction = () => {
-    boardElement.addEventListener("click", stopProp, { capture: true });
-    boardElement.addEventListener("contextmenu", stopProp, { capture: true });
+    boardElement.addEventListener("click", stopPropagation, { capture: true });
+    boardElement.addEventListener("contextmenu", stopPropagation, { capture: true });
 }
 
 const enableBoardInteraction = () => {
-    boardElement.removeEventListener("click", stopProp, { capture: true });
-    boardElement.removeEventListener("contextmenu", stopProp, { capture: true });
+    boardElement.removeEventListener("click", stopPropagation, { capture: true });
+    boardElement.removeEventListener("contextmenu", stopPropagation, { capture: true });
 }
 
-const stopProp = (e) => e.stopImmediatePropagation();
+const stopPropagation = (e) => e.stopImmediatePropagation();
+
+const setTileSettings = (difficulty) => {
+    const { size, fontSize } = TILE_SETTINGS[difficulty] || TILE_SETTINGS.hard;
+    document.documentElement.style.setProperty("--tile-size", `${size}px`);
+    document.documentElement.style.setProperty("--tile-font-size", `${fontSize}px`);
+}
 
 difficultySelect.addEventListener("change", () => {
     const selectedDifficulty = difficultySelect.value;
     const settings = DIFFICULTY_SETTINGS[selectedDifficulty];
-    init(settings);
+    setTileSettings(selectedDifficulty);
+    initGame(settings);
     displayBestScore(selectedDifficulty);
 });
 
@@ -134,11 +148,13 @@ resetButton.addEventListener("click", () => {
     enableBoardInteraction();
     const selectedDifficulty = difficultySelect.value;
     const settings = DIFFICULTY_SETTINGS[selectedDifficulty];
-    init(settings);
+    setTileSettings(selectedDifficulty);
+    initGame(settings);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
     const selectedDifficulty = difficultySelect.value;
     const settings = DIFFICULTY_SETTINGS[selectedDifficulty];
-    init(settings);
+    setTileSettings(selectedDifficulty);
+    initGame(settings);
 });
