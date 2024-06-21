@@ -13,7 +13,7 @@ A simple Minesweeper game clone built with HTML, CSS, and JavaScript.
 - [License](#license)
 
 ## Demo
-You can play the game [here](https://ani163.github.io/Minesweeper/).
+You can play the game [here](https://meluni9.github.io/Minesweeper/).
 
 ## Features
 - Three difficulty levels: Easy, Medium, Hard.
@@ -26,7 +26,7 @@ You can play the game [here](https://ani163.github.io/Minesweeper/).
 To run this project locally:
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/ani163/Minesweeper.git
+    git clone https://github.com/meluni9/Minesweeper.git
     ```
 2. **Navigate to the project directory**:
     ```bash
